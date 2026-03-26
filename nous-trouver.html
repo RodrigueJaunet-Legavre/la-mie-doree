@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nous trouver — La Mie Dorée, 75011 Paris</title>
+  <meta name="description" content="La Mie Dorée est au 24, Rue des Artisans, Paris 11e. Accès métro ligne 9 (Charonne), bus 76 et 56. Horaires et plan d'accès." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── LAYOUT PRINCIPAL ────────────────────────── */
+    .localisation-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 56px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .localisation-layout { grid-template-columns: 1fr; }
+    }
+
+    /* ── BLOCS INFO ──────────────────────────────── */
+    .info-block {
+      background: var(--cream);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      border: 1px solid var(--border);
+    }
+    .info-block + .info-block { margin-top: 20px; }
+    .info-block__title {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 18px;
+    }
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      color: var(--text-2);
+      font-size: 0.92rem;
+    }
+    .info-row + .info-row { margin-top: 16px; }
+    .info-row svg { color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+    .info-row strong { color: var(--text); }
+
+    /* Transport badges */
+    .transport-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 4px;
+    }
+    .transport-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: var(--text-2);
+    }
+    .transport-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 0.72rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .transport-badge--metro {
+      background: #5f259f;
+      color: #fff;
+    }
+    .transport-badge--bus {
+      background: var(--accent);
+      color: #fff;
+    }
+    .transport-badge--velo {
+      background: #2a7c3f;
+      color: #fff;
+    }
+
+    /* Horaires */
+    .horaires-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .horaires-table td {
+      padding: 7px 0;
+      font-size: 0.88rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .horaires-table tr:last-child td { border-bottom: none; }
+    .horaires-table td:first-child {
+      color: var(--text);
+      font-weight: 700;
+      width: 100px;
+    }
+    .horaires-table td:last-child { color: var(--text-2); }
+    .horaires-table .closed td { color: var(--text-3) !important; font-style: italic; }
+
+    /* ── CARTE ───────────────────────────────────── */
+    .map-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .map-container {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      height: 440px;
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    .map-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .map-actions a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .map-actions a.btn--outline {
+      border: 1.5px solid var(--border);
+      color: var(--text-2);
+      background: var(--cream);
+    }
+    .map-actions a.btn--outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(200,146,42,0.04);
+    }
+    .map-actions a.btn--primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .map-actions a.btn--primary:hover {
+      background: var(--brown);
+    }
+
+    @media (max-width: 900px) {
+      .map-container { height: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container">
+      <div class="nav__inner">
+        <a href="index.html" class="nav__logo">
+          La Mie <span>Dorée</span>
+          <small>Boulangerie artisanale</small>
+        </a>
+        <div class="nav__links" id="navLinks">
+          <a href="index.html">Accueil</a>
+          <a href="menu.html">Notre carte</a>
+          <a href="contact.html">Contact</a>
+          <a href="nous-trouver.html" class="btn btn--primary active">Nous trouver →</a>
+        </div>
+        <button class="nav__hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="nav__mobile" id="mobileMenu">
+        <a href="index.html">Accueil</a>
+        <a href="menu.html">Notre carte</a>
+        <a href="contact.html">Contact</a>
+        <a href="nous-trouver.html" class="btn btn--primary">Nous trouver →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero container fade-up">
+    <span class="tag">Nous trouver</span>
+    <h1>Venez nous rendre visite</h1>
+    <p>Au cœur du 11e arrondissement, à deux pas du métro Charonne.</p>
+  </div>
+
+  <!-- LOCALISATION -->
+  <section class="section">
+    <div class="container">
+      <div class="localisation-layout">
+
+        <!-- Colonne infos -->
+        <div class="slide-left">
+
+          <!-- Adresse -->
+          <div class="info-block">
+            <div class="info-block__title">Adresse</div>
+            <div class="info-row">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              <div>
+                <strong>La Mie Dorée</strong><br>
+                24, Rue des Artisans<br>
+                75011 Paris — France<br>
+                <span style="font-size:0.82rem;color:var(--text-3);margin-top:4px;display:block">11e arrondissement</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transports -->
+          <div class="info-block">
+            <div class="info-block__title">Comment venir</div>
+            <div class="transport-list">
+              <div class="transport-item">
+                <span class="transport-badge transport-badge--metro">M</span>
+                <div>
+                  <strong style="color:var(--text)">Ligne 9</strong> — Station Charonne<br>
+                  <span style="font-size:0.82rem;color:var(--text-3)">3 min à pied depuis la sortie principale</span>
+                </div>
+              </div>
+              <div class="transport-item">
+                <span class="transport-badge transport-badge--bus">76</span>
+                <div>
+                  <strong style="color:var(--text)">Bus 76</strong> — Arrêt Rue des Artisans<br>
+                  <span style="font-size:0.82rem;color:var(--text-3)">Devant la boulangerie</span>
+                </div>
+              </div>
+              <div class="transport-item">
+                <span class="transport-badge transport-badge--bus">56</span>
+                <div>
+                  <strong style="color:var(--text)">Bus 56</strong> — Arrêt Charonne<br>
+                  <span style="font-size:0.82rem;color:var(--text-3)">2 min à pied</span>
+                </div>
+              </div>
+              <div class="transport-item">
+                <span class="transport-badge transport-badge--velo">🚲</span>
+                <div>
+                  <strong style="color:var(--text)">Vélib'</strong><br>
+                  <span style="font-size:0.82rem;color:var(--text-3)">Station directement devant la boulangerie</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:0.83rem;color:var(--text-3)">
+              <strong style="color:var(--text-2)">En voiture :</strong> parking payant Rue de la Roquette (200m) · Zone de livraison possible le matin de 6h à 8h
+            </div>
+          </div>
+
+          <!-- Horaires -->
+          <div class="info-block">
+            <div class="info-block__title">Horaires d'ouverture</div>
+            <table class="horaires-table">
+              <tbody>
+                <tr class="closed"><td>Lundi</td><td>Fermé</td></tr>
+                <tr><td>Mardi</td><td>7h00 – 19h30</td></tr>
+                <tr><td>Mercredi</td><td>7h00 – 19h30</td></tr>
+                <tr><td>Jeudi</td><td>7h00 – 19h30</td></tr>
+                <tr><td>Vendredi</td><td>7h00 – 19h30</td></tr>
+                <tr><td>Samedi</td><td>7h00 – 19h30</td></tr>
+                <tr><td>Dimanche</td><td>7h00 – 13h00</td></tr>
+              </tbody>
+            </table>
+            <p style="font-size:0.78rem;color:var(--text-3);margin-top:14px">
+              Fermeture exceptionnelle possible les jours fériés.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Carte -->
+        <div class="map-wrapper slide-right">
+          <div class="map-container">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2625.152!2d2.3872!3d48.8534!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66dfb6b7c67ad%3A0x63c0db05c14d5da4!2sRue%20des%20Artisans%2C%2075011%20Paris!5e0!3m2!1sfr!2sfr!4v1710000000000!5m2!1sfr!2sfr"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="La Mie Dorée — 24 Rue des Artisans, 75011 Paris"
+            ></iframe>
+          </div>
+          <div class="map-actions">
+            <a href="https://maps.google.com/?q=Rue+des+Artisans+75011+Paris" target="_blank" rel="noopener" class="btn--primary">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6-10l6-3m0 0l5.447 2.724A1 1 0 0121 7.618v10.764a1 1 0 01-1.447.894L15 17m0-13v13"/></svg>
+              Itinéraire Google Maps
+            </a>
+            <a href="https://maps.apple.com/?q=Rue+des+Artisans+75011+Paris" target="_blank" rel="noopener" class="btn--outline">
+              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Plans Apple
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA vers contact -->
+  <section class="section" style="background:var(--bg-alt);padding-top:60px;padding-bottom:60px">
+    <div class="container" style="text-align:center">
+      <div class="fade-up">
+        <p style="color:var(--text-2);font-size:1rem;margin-bottom:20px">Vous avez une question ou souhaitez passer une commande ?</p>
+        <a href="contact.html" class="btn btn--primary">Nous écrire →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <a href="index.html" class="nav__logo">La Mie <span>Dorée</span></a>
+          <p>Boulangerie artisanale au cœur du 11e arrondissement. Pains, viennoiseries et pâtisseries maison depuis 1987.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="menu.html">Notre carte</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="nous-trouver.html">Nous trouver</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Informations</h4>
+          <ul>
+            <li><a href="contact.html">Horaires</a></li>
+            <li><a href="nous-trouver.html">Plan d'accès</a></li>
+            <li><a href="contact.html">Commandes spéciales</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2024 La Mie Dorée. Tous droits réservés.</span>
+        <span>24, Rue des Artisans — 75011 Paris · 01 43 56 78 90</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

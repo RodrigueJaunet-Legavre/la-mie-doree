@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notre carte — La Mie Dorée</title>
+  <meta name="description" content="Découvrez notre sélection de pains, viennoiseries et pâtisseries artisanales. Tous nos produits sont préparés chaque matin dans notre fournil parisien." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* ── CATÉGORIE HEADER ─────────────────────── */
+    .cat-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .cat-header__icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 14px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: var(--shadow);
+    }
+    .cat-header__icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cat-header__text h2 { font-size: 1.9rem; }
+    .cat-header__text p  { font-size: 0.9rem; margin-top: 4px; }
+
+    /* ── GRILLE PRODUITS ──────────────────────── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .product-card {
+      background: var(--cream);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 24px 26px;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    .product-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+    }
+
+    .product-card__name {
+      font-family: var(--font-title);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .product-card__desc {
+      font-size: 0.85rem;
+      color: var(--text-3);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .product-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .product-card__price {
+      font-family: var(--font-title);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .product-card__badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      background: var(--bg-alt);
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    /* ── SÉPARATEUR SECTION ───────────────────── */
+    .cat-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 72px 0;
+    }
+
+    /* ── FORMULE ──────────────────────────────── */
+    .formule-card {
+      background: linear-gradient(135deg, #3E2410 0%, #5C3A1E 60%, #7A4A25 100%);
+      border-radius: var(--radius);
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: center;
+      color: #fff;
+      border: 1px solid rgba(232,184,75,0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .formule-card::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 260px;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=60') center/cover no-repeat;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .formule-card h3 {
+      color: var(--gold);
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+    .formule-card p { color: rgba(255,255,255,0.65); font-size: 0.95rem; }
+    .formule-card__items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .formule-card__item {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.8);
+    }
+    .formule-card__price {
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .formule-card__price .amount {
+      font-family: var(--font-title);
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .formule-card__price .label {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 6px;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── NOTE EN BAS ──────────────────────────── */
+    .carte-note {
+      background: var(--bg-alt);
+      border-radius: var(--radius);
+      padding: 24px 32px;
+      border: 1px solid var(--border);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      margin-top: 56px;
+    }
+    .carte-note__icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+    .carte-note p { font-size: 0.88rem; color: var(--text-2); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .formule-card  { grid-template-columns: 1fr; }
+      .formule-card::before { display: none; }
+    }
+    @media (max-width: 500px) {
+      .products-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="container">
+      <div class="nav__inner">
+        <a href="index.html" class="nav__logo">
+          La Mie <span>Dorée</span>
+          <small>Boulangerie artisanale</small>
+        </a>
+        <div class="nav__links" id="navLinks">
+          <a href="index.html">Accueil</a>
+          <a href="menu.html" class="active">Notre carte</a>
+          <a href="contact.html">Contact</a>
+          <a href="nous-trouver.html" class="btn btn--primary">Nous trouver →</a>
+        </div>
+        <button class="nav__hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <div class="nav__mobile" id="mobileMenu">
+        <a href="index.html">Accueil</a>
+        <a href="menu.html">Notre carte</a>
+        <a href="contact.html">Contact</a>
+        <a href="nous-trouver.html" class="btn btn--primary">Nous trouver →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero container fade-up">
+    <span class="tag">Notre carte</span>
+    <h1>Tout sort du fournil ce matin</h1>
+    <p>Pains, viennoiseries et pâtisseries préparés chaque jour dès 4h du matin. Les prix s'entendent à l'unité ou au poids selon le produit.</p>
+  </div>
+
+  <!-- CARTE -->
+  <section class="section section--cream">
+    <div class="container">
+
+      <!-- ── NOS PAINS ── -->
+      <div class="cat-header fade-up">
+        <div class="cat-header__icon">
+          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=120&q=80" alt="Pain artisanal au levain" />
+        </div>
+        <div class="cat-header__text">
+          <h2>Nos pains</h2>
+          <p>Fermentation lente, cuisson sur sole. Farines Label Rouge françaises.</p>
+        </div>
+      </div>
+      <div class="products-grid">
+        <div class="product-card fade-up fade-up--delay-1">
+          <div class="product-card__name">Baguette Tradition</div>
+          <div class="product-card__desc">Notre signature. Façonnée à la main, farine T65 Label Rouge, 18h de fermentation. Croûte dorée et craquante, mie irrégulière et savoureuse.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">1,30 €</span>
+            <span class="product-card__badge">Unité</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-2">
+          <div class="product-card__name">Pain de campagne</div>
+          <div class="product-card__desc">Mélange farine blanche et seigle. Levain naturel, longue fermentation au froid. Une mie dense aux arômes profonds, idéale avec fromage et charcuterie.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">3,20 €</span>
+            <span class="product-card__badge">400 g</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-3">
+          <div class="product-card__name">Pain aux céréales</div>
+          <div class="product-card__desc">Blé, épeautre, sésame, tournesol, lin. Riche en fibres, très aromatique. Parfait pour les petits-déjeuners ou les tartines du soir.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">3,60 €</span>
+            <span class="product-card__badge">400 g</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-1">
+          <div class="product-card__name">Pain de seigle</div>
+          <div class="product-card__desc">100% farine de seigle biologique. Mie compacte, légèrement acide, remarquablement moelleuse. Se marie parfaitement avec saumon fumé et fromage frais.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">3,40 €</span>
+            <span class="product-card__badge">400 g</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-2">
+          <div class="product-card__name">Miche au levain</div>
+          <div class="product-card__desc">Notre pain phare. 48h de fermentation au levain chef de la maison. Conservation exceptionnelle, croûte épaisse dorée, mie généreuse. À partager en famille.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">6,50 €</span>
+            <span class="product-card__badge">800 g</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-3">
+          <div class="product-card__name">Pain aux noix</div>
+          <div class="product-card__desc">Noix de Grenoble AOP concassées généreusement dans une pâte légèrement sucrée au miel de lavande. Un accord parfait avec les fromages de caractère.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">4,20 €</span>
+            <span class="product-card__badge">400 g</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-sep"></div>
+
+      <!-- ── VIENNOISERIES ── -->
+      <div class="cat-header fade-up">
+        <div class="cat-header__icon">
+          <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=120&q=80" alt="Croissants au beurre feuilletés" />
+        </div>
+        <div class="cat-header__text">
+          <h2>Viennoiseries</h2>
+          <p>Beurre AOP Charentes-Poitou. Feuilletage réalisé entièrement à la main chaque matin.</p>
+        </div>
+      </div>
+      <div class="products-grid">
+        <div class="product-card fade-up fade-up--delay-1">
+          <div class="product-card__name">Croissant au beurre</div>
+          <div class="product-card__desc">27 couches de feuilletage, beurre AOP. Dorure à l'œuf, cuisson en sole. Croustillant à l'extérieur, fondant dedans. La référence de notre vitrine depuis 1987.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">1,40 €</span>
+            <span class="product-card__badge">Unité</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-2">
+          <div class="product-card__name">Pain au chocolat</div>
+          <div class="product-card__desc">Deux barres de chocolat noir Valrhona 66% enveloppées dans notre pâte feuilletée au beurre. Pour les amateurs sérieux de chocolat.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">1,60 €</span>
+            <span class="product-card__badge">Unité</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-3">
+          <div class="product-card__name">Chausson aux pommes</div>
+          <div class="product-card__desc">Compote de pommes Braeburn cuites maison, légèrement vanillée et cannellée. Pâte feuilletée dorée et craquante. Un classique indémodable.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">1,80 €</span>
+            <span class="product-card__badge">Unité</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-1">
+          <div class="product-card__name">Brioche individuelle</div>
+          <div class="product-card__desc">Brioche nanterre moelleuse, riche en beurre et en œufs. Légèrement sucrée, parfumée à la fleur d'oranger. Idéale pour le petit-déjeuner ou le goûter.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">1,90 €</span>
+            <span class="product-card__badge">Unité</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-2">
+          <div class="product-card__name">Croissant aux amandes</div>
+          <div class="product-card__desc">Croissant de la veille imbibé de sirop d'amandes, garni de crème frangipane maison, parsemé d'amandes effilées grillées. Gourmand et généreux.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">2,10 €</span>
+            <span class="product-card__badge">Unité</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-3">
+          <div class="product-card__name">Pain aux raisins</div>
+          <div class="product-card__desc">Pâte levée feuilletée, crème pâtissière à la vanille de Bourbon, raisins secs macérés au rhum. Un classique viennois que nous chérissons.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">1,70 €</span>
+            <span class="product-card__badge">Unité</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-sep"></div>
+
+      <!-- ── PÂTISSERIES ── -->
+      <div class="cat-header fade-up">
+        <div class="cat-header__icon">
+          <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=120&q=80" alt="Pâtisseries françaises artisanales" />
+        </div>
+        <div class="cat-header__text">
+          <h2>Pâtisseries</h2>
+          <p>Créées chaque matin par Marie, notre pâtissière. Fruits frais de saison, produits sélectionnés.</p>
+        </div>
+      </div>
+      <div class="products-grid">
+        <div class="product-card fade-up fade-up--delay-1">
+          <div class="product-card__name">Tarte aux fraises</div>
+          <div class="product-card__desc">Pâte sablée bretonne, crème d'amandes, crème diplomate vanille, fraises Gariguette de saison. Glacée au nappage rosé, fleurie à la menthe.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">4,50 €</span>
+            <span class="product-card__badge">La part</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-2">
+          <div class="product-card__name">Tarte aux pommes</div>
+          <div class="product-card__desc">Pâte feuilletée inversée, compote de fond, lamelles de pommes Golden pochées au cidre breton, nappage doré. Notre tarte signature depuis l'ouverture.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">3,80 €</span>
+            <span class="product-card__badge">La part</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-3">
+          <div class="product-card__name">Éclair au café</div>
+          <div class="product-card__desc">Pâte à choux cuite sur sole, crème pâtissière au café grand cru, fondant café lustré. La texture de la crème est notre fierté : dense, soyeuse, intense.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">4,20 €</span>
+            <span class="product-card__badge">Unité</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-1">
+          <div class="product-card__name">Éclair au chocolat</div>
+          <div class="product-card__desc">Pâte à choux, crème pâtissière au chocolat Valrhona 70%, fondant chocolat brillant. Pour les amateurs de chocolat intense et sans compromis.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">4,20 €</span>
+            <span class="product-card__badge">Unité</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-2">
+          <div class="product-card__name">Mille-feuille</div>
+          <div class="product-card__desc">Trois couches de feuilletage caramélisé, crème mousseline à la vanille de Tahiti, glaçage royale marbré. Assemblé à la commande pour conserver le croustillant.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">4,80 €</span>
+            <span class="product-card__badge">La part</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-3">
+          <div class="product-card__name">Paris-Brest</div>
+          <div class="product-card__desc">Notre bestseller. Couronne de chou, crème mousseline pralinée maison, pralin aux noisettes du Piémont grillées, amandes effilées. Une institution.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">5,20 €</span>
+            <span class="product-card__badge">La part</span>
+          </div>
+        </div>
+        <div class="product-card fade-up fade-up--delay-1">
+          <div class="product-card__name">Opéra</div>
+          <div class="product-card__desc">Biscuit joconde imbibé café, ganache chocolat Caraïbe, crème au beurre café. Assemblé en 7 couches millimétrées. Le grand classique de la pâtisserie française.</div>
+          <div class="product-card__footer">
+            <span class="product-card__price">4,90 €</span>
+            <span class="product-card__badge">La part</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cat-sep"></div>
+
+      <!-- ── FORMULE ── -->
+      <div class="fade-up">
+        <span class="tag">Formule</span>
+        <div class="formule-card" style="margin-top:20px">
+          <div>
+            <h3>Formule Petit-Déjeuner</h3>
+            <p>Commencez la journée du bon pied avec notre formule maison, disponible du mardi au dimanche de 7h à 10h30.</p>
+            <div class="formule-card__items">
+              <span class="formule-card__item">🥖 1 Baguette Tradition</span>
+              <span class="formule-card__item">🥐 2 Viennoiseries au choix</span>
+              <span class="formule-card__item">☕ 1 Boisson chaude</span>
+            </div>
+          </div>
+          <div class="formule-card__price">
+            <div class="amount">6,50€</div>
+            <div class="label">par personne</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTE -->
+      <div class="carte-note fade-up">
+        <div class="carte-note__icon">ℹ️</div>
+        <p>Nos produits sont fabriqués dans un atelier manipulant gluten, lait, œufs, fruits à coque et soja. Pour toute allergie ou intolérance, n'hésitez pas à interroger notre équipe en boutique. Carte susceptible d'évoluer selon les saisons et les arrivages.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__inner">
+        <div class="footer__brand">
+          <a href="index.html" class="nav__logo">La Mie <span>Dorée</span></a>
+          <p>Boulangerie artisanale au cœur du 11e arrondissement. Pains, viennoiseries et pâtisseries maison depuis 1987.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="menu.html">Notre carte</a></li>
+            <li><a href="contact.html">Contact & accès</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Informations</h4>
+          <ul>
+            <li><a href="contact.html">Horaires</a></li>
+            <li><a href="contact.html">Nous trouver</a></li>
+            <li><a href="contact.html">Commandes spéciales</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2024 La Mie Dorée. Tous droits réservés.</span>
+        <span>24, Rue des Artisans — 75011 Paris · 01 43 56 78 90</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
